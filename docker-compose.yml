@@ -1,0 +1,66 @@
+version: "3.8"
+services:
+  # redis:
+  #   image: redis:7.0.11-alpine
+  #   ports:
+  #     - "6379:6379"
+  #   restart: always
+  #   networks:
+  #     - webnet
+  #   volumes:
+  #     - ./private/redis:/data
+  #   expose:
+  #     - 6379
+  mysql:
+    image: mysql:8.1.0
+    platform: linux/amd64
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - ./private/mysql:/var/lib/mysql
+    networks:
+      - webnet
+    expose:
+      - 3306
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    platform: linux/amd64
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "808:80"
+    depends_on:
+      - mysql
+    networks:
+      - webnet
+    expose:
+      - 808
+  # web:
+  #   image: ghcr.io/hectortav/coupons:main
+  #   restart: always
+  #   environment:
+  #     REDIS_HOST: redis
+  #   networks:
+  #     - webnet
+  #   depends_on:
+  #     - redis
+  #   expose:
+  #     - 3000
+  # nginx:
+  #   image: ghcr.io/hectortav/nginx:main
+  #   restart: always
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   networks:
+  #     - webnet
+  #   links:
+  #     - web
+networks:
+  webnet:
