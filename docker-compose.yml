@@ -14,40 +14,24 @@ services:
       - webnet
     expose:
       - 3306
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    platform: linux/amd64
-    links:
-      - mysql
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-    ports:
-      - "808:80"
-    depends_on:
-      - mysql
+  web:
+    image: ghcr.io/hectortav/coupons:main
+    restart: always
     networks:
       - webnet
+    depends_on:
+      - redis
     expose:
-      - 808
-   web:
-     image: ghcr.io/hectortav/coupons:main
-     restart: always
-     networks:
-       - webnet
-     depends_on:
-       - redis
-     expose:
-       - 3000
-   nginx:
-     image: ghcr.io/hectortav/nginx:main
-     restart: always
-     ports:
-       - 80:80
-       - 443:443
-     networks:
-       - webnet
-     links:
-       - web
+      - 3000
+  nginx:
+    image: ghcr.io/hectortav/nginx:main
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - webnet
+    links:
+      - web
 networks:
   webnet:
