@@ -1,6 +1,5 @@
 import React from "react";
 import { Input } from "~/components";
-// import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useDebounce } from "~/hooks";
 import { api } from "~/utils/api";
 import type { InputProps } from "./Input";
@@ -38,7 +37,6 @@ const LocationInput = React.forwardRef<HTMLInputElement, LocationInputProps>(
         <Input
           autoComplete="off"
           placeholder={placeholder}
-          // icon={<MagnifyingGlassIcon className="h-6 w-6" />}
           value={input}
           onChange={(e) => {
             setInput(e.target.value);

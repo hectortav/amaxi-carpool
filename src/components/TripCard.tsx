@@ -4,6 +4,9 @@ import {
   MapPinIcon,
   UserIcon,
 } from "@heroicons/react/20/solid";
+import { FaCar } from "react-icons/fa";
+import { BiTrip } from "react-icons/bi";
+import { CiCalendarDate } from "react-icons/ci";
 import type { Trip, Location, User, Passenger } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
@@ -53,8 +56,8 @@ const TripCard = ({
       <div className="flex w-full">
         <div className="ml-auto flex flex-col gap-2 sm:flex-row">
           {trip.from && trip.to && (
-            <div className="rounded-full bg-main/60 px-2 text-background">
-              🛣️{" "}
+            <div className="flex items-center gap-2 rounded-full bg-main/60 px-2 text-background">
+              <BiTrip className="h-4 w-4" />{" "}
               {calculateDistance(
                 trip.from?.latitude,
                 trip.from?.longitude,
@@ -65,17 +68,17 @@ const TripCard = ({
             </div>
           )}
           {session?.user.id === trip.userId && (
-            <div className="rounded-full bg-main/60 px-2 text-background">
-              🛞 I am the driver
+            <div className="flex items-center gap-2 rounded-full bg-main/60 px-2 text-background">
+              <FaCar className="h-4 w-4" /> I am the driver
             </div>
           )}
           <div className="ml-auto flex gap-2">
-            <div className="rounded-full bg-main px-2 text-background">
-              📅 {trip.date.getDate()}-{trip.date.getMonth() + 1}-
-              {trip.date.getFullYear()}
+            <div className="flex items-center gap-2 rounded-full bg-main px-2 text-background">
+              <CiCalendarDate className="h-4 w-4" /> {trip.date.getDate()}-
+              {trip.date.getMonth() + 1}-{trip.date.getFullYear()}
             </div>
             <div className="rounded-full bg-main px-2 text-background">
-              ⏰ {trip.date.getHours()}:{trip.date.getMinutes()}
+              {trip.date.getHours()}:{trip.date.getMinutes()}
             </div>
           </div>
         </div>

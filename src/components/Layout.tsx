@@ -1,6 +1,10 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
+import { CgProfile } from "react-icons/cg";
+import { FaCar } from "react-icons/fa";
+import { BiTrip } from "react-icons/bi";
 
 function Auth() {
   const { data: sessionData } = useSession();
@@ -31,28 +35,36 @@ const Links = () => {
         href="/trips"
         className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
       >
-        <span className="sm:text-md text-2xl">🚗</span>
+        <span className="sm:text-md text-2xl">
+          <FaCar className="h-6 w-6" />
+        </span>
         <span className="sm:text-md text-xs">My Trips</span>
       </Link>
       <Link
         href="/join-trips"
         className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
       >
-        <span className="sm:text-md text-2xl">🧳</span>
+        <span className="sm:text-md text-2xl">
+          <BiTrip className="h-6 w-6" />
+        </span>
         <span className="sm:text-md text-xs">Join Trips</span>
       </Link>
       <Link
         href="/chat"
         className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
       >
-        <span className="sm:text-md text-2xl">💬</span>
+        <span className="sm:text-md text-2xl">
+          <IoChatbubbleEllipsesOutline className="h-6 w-6" />
+        </span>
         <span className="sm:text-md text-xs">Chat</span>
       </Link>
       <Link
         href="/profile"
         className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
       >
-        <span className="sm:text-md text-2xl">👤</span>
+        <span className="sm:text-md text-2xl">
+          <CgProfile className="h-6 w-6" />
+        </span>
         <span className="sm:text-md text-xs">Profile</span>
       </Link>
     </>
