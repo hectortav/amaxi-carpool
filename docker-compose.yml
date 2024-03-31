@@ -15,16 +15,14 @@ services:
     expose:
       - 3306
   web:
-    image: ghcr.io/hectortav/coupons:main
+    image: web:latest
     restart: always
     networks:
       - webnet
-    depends_on:
-      - redis
     expose:
       - 3000
   nginx:
-    image: ghcr.io/hectortav/nginx:main
+    image: nginx:carpool
     restart: always
     ports:
       - 80:80
