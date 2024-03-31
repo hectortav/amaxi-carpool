@@ -111,7 +111,10 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
           <Auth />
         </div>
       </nav>
-      <main className="flex h-16 min-h-screen flex-col pb-8">{children}</main>
+      <main className="flex h-16 min-h-screen flex-col">
+        {children}
+        <div className="h-16" />
+      </main>
       <nav className="fixed bottom-0 left-0 right-0 mt-auto flex w-full items-center bg-slate-200 px-4 py-2 sm:hidden">
         <div className="flex w-full items-center justify-between">
           <Links />
