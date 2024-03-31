@@ -76,10 +76,12 @@ model User {
   carMaker       String?
   carModel       String?
   numberOfPassengers Int?
+  myCompany     Company?  @relation(name: "owner")
 
   myTrips       Trip[]
   trips         Passenger[]
   messages      Message[]
+  worksAt       Employee?
 }
 
 model VerificationToken {
@@ -103,6 +105,7 @@ model Location {
   user     User?
   fromTrip Trip? @relation("from")
   toTrip   Trip? @relation("to")
+  company  Company?
 }
 
 model Trip {
@@ -149,4 +152,38 @@ model Message {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Company {
+  id        String @id @default(cuid())
+  userId    String @unique
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade, name: "owner")
+
+  name      String @db.Text
+  logo      String @db.Text
+  code      String
+  addressId      String?   @unique
+  address        Location? @relation(fields: [addressId], references: [id])
+  
+
+  employees Employee[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Employee {
+  id        String @id @default(cuid())
+  userId    String @unique
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+
+  companyId    String @unique
+  company      Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, companyId])
 }

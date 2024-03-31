@@ -5,6 +5,7 @@ import { userRouter } from "~/server/api/routers/user";
 import { carRouter } from "./routers/car";
 import { tripRouter } from "./routers/trip";
 import { chatRouter } from "./routers/chat";
+import { companyRouter } from "./routers/company";
 
 /**
  * This is the primary router for your server.
@@ -13,6 +14,7 @@ import { chatRouter } from "./routers/chat";
  */
 export const appRouter = createTRPCRouter({
   user: userRouter,
+  company: companyRouter,
   trip: tripRouter,
   chat: chatRouter,
   car: carRouter,

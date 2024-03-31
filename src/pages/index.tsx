@@ -1,13 +1,10 @@
-import Link from "next/link";
 import { Layout } from "~/components";
-import { api } from "~/utils/api";
 
 export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
-
   return (
-    <Layout>
-      <div>hello world</div>
-    </Layout>
+    <div className="flex h-screen w-screen items-center justify-center bg-main">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo.png" alt="logo" className="h-64 w-64" />
+    </div>
   );
 }

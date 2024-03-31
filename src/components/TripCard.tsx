@@ -181,7 +181,7 @@ const TripCard = ({
                     (trip.passengers.length + 1 + 1) /
                     2
                   ).toFixed(2)}{" "}
-                  €
+                  € / per passenger
                 </div>
               )}
           </div>

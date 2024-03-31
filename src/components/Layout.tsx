@@ -79,10 +79,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <meta name="description" content="Amaxi" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <nav className="sticky hidden items-center bg-secondary/20 px-4 py-2 sm:flex">
+      <nav className="sticky hidden h-16 items-center bg-secondary/20 px-4 py-2 sm:flex">
         <div className="mr-auto">
           <Link href="/">
-            <p className="font-semibold">Amaxi 🚗</p>
+            <p className="font-semibold">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.png" alt="logo" className="h-12 w-12" />
+            </p>
           </Link>
         </div>
         <div className="ml-auto flex items-center gap-2">
@@ -92,7 +95,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <Auth />
         </div>
       </nav>
-      <main className=" flex min-h-screen flex-col">{children}</main>
+      <main className="flex h-16 min-h-screen flex-col">{children}</main>
       <nav className="sticky bottom-0 flex items-center bg-secondary/20 px-4 py-2 sm:hidden">
         <div className="flex w-full items-center justify-between">
           <Links />

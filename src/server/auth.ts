@@ -38,6 +38,9 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  pages: {
+    newUser: "/profile",
+  },
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
@@ -58,6 +61,7 @@ export const authOptions: NextAuthOptions = {
         },
       },
     }),
+
     /**
      * ...add more providers here.
      *
