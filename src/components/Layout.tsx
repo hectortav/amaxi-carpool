@@ -81,11 +81,26 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <nav className="sticky hidden h-16 items-center bg-secondary/20 px-4 py-2 sm:flex">
-        <div className="mr-auto">
+        <div className="mr-auto flex items-center gap-4">
           <Link href="/">
             <p className="font-semibold">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.png" alt="logo" className="h-12 w-12" />
+            </p>
+          </Link>
+          <Link
+            href="https://github.com/hectortav/amaxi-carpool"
+            target="_blank"
+            className="rounded-xl px-2 py-1 hover:bg-main/10"
+          >
+            <p className="flex items-center gap-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
+                alt="github"
+                className="h-4 w-4"
+              />
+              Github
             </p>
           </Link>
         </div>
