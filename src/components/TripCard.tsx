@@ -6,12 +6,20 @@ import {
 } from "@heroicons/react/20/solid";
 import type { Trip, Location, User, Passenger } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 import { api } from "~/utils/api";
+import {
+  calculateDistance,
+  calculateFuelConsumption,
+  extraCosts,
+  getFuelPrice,
+} from "~/utils/distance";
+import Button from "./Button";
 
 const TripCard = ({
   trip,
-  children,
   showDetails,
+  showActions,
 }: {
   trip: Trip & {
     from: Location | null;
@@ -20,9 +28,16 @@ const TripCard = ({
     passengers: Passenger[];
   };
   showDetails?: boolean;
-  children?: React.ReactNode;
+  showActions?: boolean;
 }) => {
   const { data: session } = useSession();
+  const utils = api.useUtils();
+  const join = api.trip.join.useMutation({
+    onSuccess() {
+      toast("Welcome onboard!");
+      void utils.trip.get.invalidate();
+    },
+  });
 
   const carDetails = api.car.details.useQuery(
     {
@@ -37,6 +52,18 @@ const TripCard = ({
     <div className="flex flex-col gap-2 rounded-xl bg-white p-4">
       <div className="flex w-full">
         <div className="ml-auto flex flex-col gap-2 sm:flex-row">
+          {trip.from && trip.to && (
+            <div className="rounded-full bg-main/60 px-2 text-background">
+              🛣️{" "}
+              {calculateDistance(
+                trip.from?.latitude,
+                trip.from?.longitude,
+                trip.to?.latitude,
+                trip.to?.longitude,
+              ).toFixed(2)}{" "}
+              km
+            </div>
+          )}
           {session?.user.id === trip.userId && (
             <div className="rounded-full bg-main/60 px-2 text-background">
               🛞 I am the driver
@@ -118,7 +145,45 @@ const TripCard = ({
           </div>
         </div>
       )}
-      <div className="w-full">{children}</div>
+      {showActions && (
+        <div className="w-full">
+          <div className="mt-2 flex w-full items-center ">
+            <Button
+              className="mr-auto"
+              onClick={() =>
+                join.mutate({
+                  tripId: trip.id,
+                })
+              }
+            >
+              Join trip
+            </Button>
+            {trip.from &&
+              trip.to &&
+              carDetails?.data?.["Fuel Consumption City (L/100 km)"] && (
+                <div className="rounded-full border border-main/30 bg-yellow-400/30 px-2">
+                  {(
+                    (calculateFuelConsumption(
+                      carDetails.data["Fuel Consumption City (L/100 km)"],
+                      calculateDistance(
+                        trip.from?.latitude,
+                        trip.from?.longitude,
+                        trip.to?.latitude,
+                        trip.to?.longitude,
+                      ),
+                    ) *
+                      getFuelPrice() +
+                      extraCosts()) /
+                    // + the driver + me if I join
+                    (trip.passengers.length + 1 + 1) /
+                    2
+                  ).toFixed(2)}{" "}
+                  €
+                </div>
+              )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

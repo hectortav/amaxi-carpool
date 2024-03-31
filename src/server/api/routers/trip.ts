@@ -32,6 +32,9 @@ export const tripRouter = createTRPCRouter({
   get: protectedProcedure.query(({ ctx }) =>
     ctx.db.trip.findMany({
       where: {
+        NOT: {
+          userId: ctx.session.user.id,
+        },
         date: {
           gte: new Date(),
         },
