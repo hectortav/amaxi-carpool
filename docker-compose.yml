@@ -1,16 +1,5 @@
 version: "3.8"
 services:
-  # redis:
-  #   image: redis:7.0.11-alpine
-  #   ports:
-  #     - "6379:6379"
-  #   restart: always
-  #   networks:
-  #     - webnet
-  #   volumes:
-  #     - ./private/redis:/data
-  #   expose:
-  #     - 6379
   mysql:
     image: mysql:8.1.0
     platform: linux/amd64
@@ -41,26 +30,24 @@ services:
       - webnet
     expose:
       - 808
-  # web:
-  #   image: ghcr.io/hectortav/coupons:main
-  #   restart: always
-  #   environment:
-  #     REDIS_HOST: redis
-  #   networks:
-  #     - webnet
-  #   depends_on:
-  #     - redis
-  #   expose:
-  #     - 3000
-  # nginx:
-  #   image: ghcr.io/hectortav/nginx:main
-  #   restart: always
-  #   ports:
-  #     - 80:80
-  #     - 443:443
-  #   networks:
-  #     - webnet
-  #   links:
-  #     - web
+   web:
+     image: ghcr.io/hectortav/coupons:main
+     restart: always
+     networks:
+       - webnet
+     depends_on:
+       - redis
+     expose:
+       - 3000
+   nginx:
+     image: ghcr.io/hectortav/nginx:main
+     restart: always
+     ports:
+       - 80:80
+       - 443:443
+     networks:
+       - webnet
+     links:
+       - web
 networks:
   webnet:
