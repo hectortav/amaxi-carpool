@@ -26,6 +26,7 @@ export const tripRouter = createTRPCRouter({
       include: {
         from: true,
         to: true,
+        passengers: true,
       },
     }),
   ),

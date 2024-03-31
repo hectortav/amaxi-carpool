@@ -35,7 +35,8 @@ export default function Autocomplete<T extends { id: string; name: string }>({
           <div className="relative w-full cursor-default overflow-hidden">
             <Combobox.Input
               className="w-full appearance-none rounded border border-gray-400 px-3 py-2 leading-tight text-text focus:border-main focus:outline-none"
-              displayValue={(item) => item.name}
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+              displayValue={(item: { name: string }) => item.name}
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
