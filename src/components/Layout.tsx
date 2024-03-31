@@ -111,8 +111,8 @@ const Layout = ({ children }: { children?: React.ReactNode }) => {
           <Auth />
         </div>
       </nav>
-      <main className="flex h-16 min-h-screen flex-col">{children}</main>
-      <nav className="sticky bottom-0 flex items-center bg-secondary/20 px-4 py-2 sm:hidden">
+      <main className="flex h-16 min-h-screen flex-col pb-8">{children}</main>
+      <nav className="fixed bottom-0 left-0 right-0 mt-auto flex w-full items-center bg-slate-200 px-4 py-2 sm:hidden">
         <div className="flex w-full items-center justify-between">
           <Links />
           {!session?.user.id && (
