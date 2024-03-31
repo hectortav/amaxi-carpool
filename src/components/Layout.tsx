@@ -24,30 +24,68 @@ function Auth() {
   );
 }
 
+const Links = () => {
+  return (
+    <>
+      <Link
+        href="/trips"
+        className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
+      >
+        <span className="sm:text-md text-2xl">🚗</span>
+        <span className="sm:text-md text-xs">My Trips</span>
+      </Link>
+      <Link
+        href="/join-trips"
+        className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
+      >
+        <span className="sm:text-md text-2xl">🧳</span>
+        <span className="sm:text-md text-xs">Join Trips</span>
+      </Link>
+      <Link
+        href="/chat"
+        className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
+      >
+        <span className="sm:text-md text-2xl">💬</span>
+        <span className="sm:text-md text-xs">Chat</span>
+      </Link>
+      <Link
+        href="/profile"
+        className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
+      >
+        <span className="sm:text-md text-2xl">👤</span>
+        <span className="sm:text-md text-xs">Profile</span>
+      </Link>
+    </>
+  );
+};
+
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Head>
-        <title>Amaxi</title>
+        <title>🚗 Amaxi</title>
         <meta name="description" content="Amaxi" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <nav className="flex items-center bg-black/5 px-4 py-2">
+      <nav className="sticky hidden items-center bg-secondary/20 px-4 py-2 sm:flex">
         <div className="mr-auto">
           <Link href="/">
-            <p className="font-semibold">Amaxi</p>
+            <p className="font-semibold">Amaxi 🚗</p>
           </Link>
         </div>
         <div className="ml-auto flex items-center gap-2">
-          <Link href="/trips">Trips</Link>
-          <Link href="/chat">Chat</Link>
-          <Link href="/profile">Profile</Link>
+          <Links />
+        </div>
+        <div className="ml-2 flex items-center gap-2">
           <Auth />
         </div>
       </nav>
-      <main className=" flex min-h-screen flex-col items-center justify-center">
-        {children}
-      </main>
+      <main className=" flex min-h-screen flex-col">{children}</main>
+      <nav className="sticky bottom-0 flex items-center bg-secondary/20 px-4 py-2 sm:hidden">
+        <div className="flex w-full items-center justify-between">
+          <Links />
+        </div>
+      </nav>
     </>
   );
 };

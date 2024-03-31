@@ -1,7 +1,7 @@
 import { z } from "zod";
 import cars from "../../../../data/cars.json";
 
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 type Cars = Record<
   string,
@@ -23,7 +23,7 @@ type Cars = Record<
 >;
 
 export const carRouter = createTRPCRouter({
-  makers: protectedProcedure
+  makers: publicProcedure
     .input(z.object({ search: z.string() }))
     .query(({ input }) => {
       const makers = Object.keys(cars as Cars);
@@ -31,12 +31,17 @@ export const carRouter = createTRPCRouter({
         m.toLowerCase().includes(input.search.toLowerCase()),
       );
     }),
-  models: protectedProcedure
+  models: publicProcedure
     .input(z.object({ maker: z.string(), search: z.string() }))
     .query(({ input }) => {
       const models = Object.keys((cars as Cars)[input.maker] ?? {});
       return models.filter((m) =>
         m.toLowerCase().includes(input.search.toLowerCase()),
       );
+    }),
+  details: publicProcedure
+    .input(z.object({ maker: z.string(), model: z.string() }))
+    .query(({ input }) => {
+      return (cars as Cars)[input.maker]?.[input.model]?.[0];
     }),
 });

@@ -3,6 +3,8 @@ import { locationRouter } from "~/server/api/routers/location";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { userRouter } from "~/server/api/routers/user";
 import { carRouter } from "./routers/car";
+import { tripRouter } from "./routers/trip";
+import { chatRouter } from "./routers/chat";
 
 /**
  * This is the primary router for your server.
@@ -11,6 +13,8 @@ import { carRouter } from "./routers/car";
  */
 export const appRouter = createTRPCRouter({
   user: userRouter,
+  trip: tripRouter,
+  chat: chatRouter,
   car: carRouter,
   post: postRouter,
   location: locationRouter,

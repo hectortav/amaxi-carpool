@@ -4,7 +4,8 @@ import { type AppType } from "next/app";
 import { Inter } from "next/font/google";
 
 import { api } from "~/utils/api";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "~/styles/globals.css";
 
 const inter = Inter({
@@ -18,8 +19,20 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <main className={`font-sans ${inter.variable} text-text bg-background`}>
+      <main className={`font-sans ${inter.variable} bg-background text-text`}>
         <Component {...pageProps} />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </main>
     </SessionProvider>
   );

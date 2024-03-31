@@ -10,20 +10,10 @@ import { api } from "~/utils/api";
 import { useForm } from "react-hook-form";
 import { Tab } from "@headlessui/react";
 import cn from "classnames";
-
-function formatDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero if needed
-  const day = String(date.getDate()).padStart(2, "0"); // Add leading zero if needed
-  return `${year}-${month}-${day}`;
-}
+import { formatDate } from "~/utils/date";
+import { toast } from "react-toastify";
 
 export default function Driver() {
-  /*
-driver or passernger?
-gia ton passenger (tautotita i passport)
-*/
-
   const categories = [
     { name: "Common", form: CommonForm },
     { name: "Driver", form: DriverForm },
@@ -32,7 +22,7 @@ gia ton passenger (tautotita i passport)
 
   return (
     <Layout>
-      <div className="w-full max-w-md px-2 py-16 sm:px-0">
+      <div className="mx-auto w-full max-w-md px-2 py-16 sm:px-0">
         <Tab.Group>
           <Tab.List className="flex space-x-1 rounded-xl bg-secondary p-1">
             {categories.map(({ name }) => (
@@ -93,6 +83,7 @@ const CommonForm = () => {
   const { data: me } = api.user.me.useQuery();
   const update = api.user.update.useMutation({
     onSuccess() {
+      toast("Common details saved!");
       void utils.user.me.invalidate();
     },
   });
@@ -213,7 +204,7 @@ const CommonForm = () => {
           );
         }}
         placeholder=""
-        label="Διεύθυνση"
+        label="Address"
         {...register("address", {
           required: "Address is required",
         })}
@@ -230,6 +221,7 @@ interface IFormDriver {
   driversLicense: string | null;
   carMaker: string | null;
   carModel: string | null;
+  numberOfPassengers: number | null;
 }
 
 const DriverForm = () => {
@@ -251,6 +243,7 @@ const DriverForm = () => {
   );
   const update = api.user.update.useMutation({
     onSuccess() {
+      toast("Drivers details saved!");
       void utils.user.me.invalidate();
     },
   });
@@ -353,6 +346,20 @@ const DriverForm = () => {
           errors={errors}
         />
       )}
+
+      <Input
+        {...register("numberOfPassengers", {
+          required: "Number of passengers is required",
+          min: 1,
+          max: 6,
+          valueAsNumber: true,
+        })}
+        type="number"
+        errors={errors}
+        label="Number of passenger"
+        min={0}
+        max={6}
+      />
       <Button submit disabled={!maker || !model}>
         Submit
       </Button>
@@ -369,6 +376,7 @@ const PassengerForm = () => {
   const { data: me } = api.user.me.useQuery();
   const update = api.user.update.useMutation({
     onSuccess() {
+      toast("Passenger details saved!");
       void utils.user.me.invalidate();
     },
   });

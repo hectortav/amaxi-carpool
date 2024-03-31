@@ -74,6 +74,7 @@ const LocationInput = React.forwardRef<HTMLInputElement, LocationInputProps>(
                       getPlaceInfo.mutate({
                         placeId: prediction.place_id,
                       });
+                      setInput(prediction.description);
                       setInputFocused(false);
                     }}
                   >

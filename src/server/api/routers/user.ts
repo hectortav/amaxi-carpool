@@ -33,6 +33,7 @@ export const userRouter = createTRPCRouter({
         idNumber: z.string().min(3).optional(),
         carMaker: z.string().min(1).optional(),
         carModel: z.string().min(1).optional(),
+        numberOfPassengers: z.number().int().min(1).max(6).optional(),
       }),
     )
     .mutation(async ({ ctx, input: { address, ...input } }) => {
