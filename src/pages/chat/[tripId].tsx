@@ -92,3 +92,23 @@ const Message = ({
     </div>
   );
 };
+
+import type { GetServerSideProps } from "next/types";
+import { getServerAuthSession } from "~/server/auth";
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerAuthSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
+};

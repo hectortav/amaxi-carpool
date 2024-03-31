@@ -3,15 +3,37 @@ import { Layout, Input, Button, LocationInput, TripCard } from "~/components";
 import { api } from "~/utils/api";
 import { useForm } from "react-hook-form";
 import cn from "classnames";
-import { FlagIcon, MapPinIcon, XMarkIcon } from "@heroicons/react/20/solid";
+import { XMarkIcon } from "@heroicons/react/20/solid";
 
 export default function Trip() {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
-
+  const me = api.user.me.useQuery();
+  const disabled =
+    !me.data?.licensePlate ||
+    !me.data?.driversLicense ||
+    !me.data?.numberOfPassengers ||
+    !me.data?.carMaker ||
+    !me.data?.carModel;
   return (
     <Layout>
       <div className="flex w-full p-2">
-        <Button className="ml-auto" onClick={() => setOpen(true)}>
+        <Button
+          className="ml-auto"
+          onClick={() => {
+            if (disabled) {
+              if (
+                window.confirm(
+                  "Please fill out the Driver's Form under the Profile section.",
+                )
+              ) {
+                void router.push("/profile");
+              }
+              return;
+            }
+            setOpen(true);
+          }}
+        >
           Create trip
         </Button>
       </div>
@@ -178,4 +200,25 @@ const TripsList = () => {
       {myTrips?.map((trip) => <TripCard key={trip.id} {...{ trip }} />)}
     </div>
   );
+};
+
+import type { GetServerSideProps } from "next/types";
+import { getServerAuthSession } from "~/server/auth";
+import { useRouter } from "next/router";
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerAuthSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 };

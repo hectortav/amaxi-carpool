@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const tripRouter = createTRPCRouter({
   mine: protectedProcedure.query(({ ctx }) =>
@@ -30,20 +34,28 @@ export const tripRouter = createTRPCRouter({
       },
     }),
   ),
-  get: protectedProcedure.query(({ ctx }) =>
+  get: publicProcedure.query(({ ctx }) =>
     ctx.db.trip.findMany({
       where: {
-        NOT: {
-          userId: ctx.session.user.id,
-        },
+        ...(ctx.session?.user.id
+          ? {
+              NOT: {
+                userId: ctx.session.user.id,
+              },
+            }
+          : {}),
         date: {
           gte: new Date(),
         },
-        passengers: {
-          none: {
-            userId: ctx.session.user.id,
-          },
-        },
+        ...(ctx.session?.user.id
+          ? {
+              passengers: {
+                none: {
+                  userId: ctx.session.user.id,
+                },
+              },
+            }
+          : {}),
       },
       orderBy: {
         date: "asc",

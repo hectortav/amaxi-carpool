@@ -15,31 +15,27 @@ function Auth() {
         className="group rounded-lg bg-black px-2 py-1 text-white no-underline transition hover:bg-black/80"
         onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
-        <p className="text-center group-hover:hidden">
-          {sessionData && <span>{sessionData.user?.name}</span>}
-        </p>
-        {sessionData ? (
-          <p className="hidden text-center group-hover:block">Sign out</p>
-        ) : (
-          "Sign in"
-        )}
+        {sessionData ? <p className="text-center">Sign out</p> : "Sign in"}
       </button>
     </div>
   );
 }
 
 const Links = () => {
+  const { data: session } = useSession();
   return (
     <>
-      <Link
-        href="/trips"
-        className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
-      >
-        <span className="sm:text-md text-2xl">
-          <FaCar className="h-6 w-6" />
-        </span>
-        <span className="sm:text-md text-xs">My Trips</span>
-      </Link>
+      {session?.user.id && (
+        <Link
+          href="/trips"
+          className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
+        >
+          <span className="sm:text-md text-2xl">
+            <FaCar className="h-6 w-6" />
+          </span>
+          <span className="sm:text-md text-xs">My Trips</span>
+        </Link>
+      )}
       <Link
         href="/join-trips"
         className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
@@ -49,29 +45,34 @@ const Links = () => {
         </span>
         <span className="sm:text-md text-xs">Join Trips</span>
       </Link>
-      <Link
-        href="/chat"
-        className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
-      >
-        <span className="sm:text-md text-2xl">
-          <IoChatbubbleEllipsesOutline className="h-6 w-6" />
-        </span>
-        <span className="sm:text-md text-xs">Chat</span>
-      </Link>
-      <Link
-        href="/profile"
-        className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
-      >
-        <span className="sm:text-md text-2xl">
-          <CgProfile className="h-6 w-6" />
-        </span>
-        <span className="sm:text-md text-xs">Profile</span>
-      </Link>
+      {session?.user.id && (
+        <>
+          <Link
+            href="/chat"
+            className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
+          >
+            <span className="sm:text-md text-2xl">
+              <IoChatbubbleEllipsesOutline className="h-6 w-6" />
+            </span>
+            <span className="sm:text-md text-xs">Chat</span>
+          </Link>
+          <Link
+            href="/profile"
+            className="flex flex-col items-center justify-center gap-1 rounded-lg px-2 py-1 hover:bg-secondary sm:flex-row"
+          >
+            <span className="sm:text-md text-2xl">
+              <CgProfile className="h-6 w-6" />
+            </span>
+            <span className="sm:text-md text-xs">Profile</span>
+          </Link>
+        </>
+      )}
     </>
   );
 };
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = ({ children }: { children?: React.ReactNode }) => {
+  const { data: session } = useSession();
   return (
     <>
       <Head>
@@ -99,6 +100,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <nav className="sticky bottom-0 flex items-center bg-secondary/20 px-4 py-2 sm:hidden">
         <div className="flex w-full items-center justify-between">
           <Links />
+          {!session?.user.id && (
+            <div className="ml-2 flex items-center gap-2">
+              <Auth />
+            </div>
+          )}
         </div>
       </nav>
     </>

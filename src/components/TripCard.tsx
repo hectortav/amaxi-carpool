@@ -18,6 +18,7 @@ import {
   getFuelPrice,
 } from "~/utils/distance";
 import Button from "./Button";
+import { useRouter } from "next/router";
 
 const TripCard = ({
   trip,
@@ -33,6 +34,9 @@ const TripCard = ({
   showDetails?: boolean;
   showActions?: boolean;
 }) => {
+  const router = useRouter();
+  const me = api.user.me.useQuery();
+  const disabled = !me.data?.idNumber;
   const { data: session } = useSession();
   const utils = api.useUtils();
   const join = api.trip.join.useMutation({
@@ -151,16 +155,28 @@ const TripCard = ({
       {showActions && (
         <div className="w-full">
           <div className="mt-2 flex w-full items-center ">
-            <Button
-              className="mr-auto"
-              onClick={() =>
-                join.mutate({
-                  tripId: trip.id,
-                })
-              }
-            >
-              Join trip
-            </Button>
+            {session?.user.id && (
+              <Button
+                className="mr-auto"
+                onClick={() => {
+                  if (disabled) {
+                    if (
+                      window.confirm(
+                        "Please fill out the Driver's Form under the Profile section.",
+                      )
+                    ) {
+                      void router.push("/profile");
+                    }
+                    return;
+                  }
+                  join.mutate({
+                    tripId: trip.id,
+                  });
+                }}
+              >
+                Join trip
+              </Button>
+            )}
             {trip.from &&
               trip.to &&
               carDetails?.data?.["Fuel Consumption City (L/100 km)"] && (
